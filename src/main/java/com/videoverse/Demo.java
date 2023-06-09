@@ -2,8 +2,11 @@ package com.videoverse;
 
 import controller.UserController;
 import controller.VideoController;
+import dao.VideoDBDAO;
 import model.User;
 import model.Video;
+
+import java.util.List;
 
 public class Demo {
 
@@ -28,8 +31,20 @@ public class Demo {
 //            System.out.println(likes);
             int unlike = VideoController.getInstance().removeDislikeVideo(4,2);
             System.out.println(unlike);
+
+
         } catch (Exception e) {
             System.out.println("Register failed - " + e.getMessage());
+        }
+
+        List<Video> likedVideos = null;
+        try {
+            likedVideos = UserController.getInstance().getLikedVideos(3);
+        } catch (Exception e) {
+            System.out.println("Getting liked videos failed - " + e.getMessage());
+        }
+        for(Video v : likedVideos){
+            System.out.println(v.getId() + " - " + v.getTitle());
         }
 
 

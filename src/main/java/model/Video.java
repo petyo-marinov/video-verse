@@ -23,4 +23,8 @@ public class Video {
     public User getOwner() {
         return owner;
     }
+
+    public String  getTitle() {
+        return title;
+    }
 }

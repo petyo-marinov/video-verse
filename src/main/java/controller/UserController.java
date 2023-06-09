@@ -1,9 +1,12 @@
 package controller;
 
-import dao.UserDAO;
 import dao.UserDBDAO;
+import dao.VideoDBDAO;
 import model.User;
+import model.Video;
 import org.mindrot.jbcrypt.BCrypt;
+
+import java.util.List;
 
 public class UserController {
 
@@ -31,6 +34,13 @@ public class UserController {
         password = hashPassword(password);
 
         return UserDBDAO.getInstance().insertUser(email,username,password,age,gender);
+    }
+
+    public List<Video> getLikedVideos(int userId) throws Exception {
+        if(UserDBDAO.getInstance().getById(userId) == null){
+            throw new Exception("user does not exist");
+        }
+        return VideoDBDAO.getInstance().getLikedByUser(userId);
     }
 
     private static String hashPassword(String password) {

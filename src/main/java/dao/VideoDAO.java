@@ -18,4 +18,8 @@ public interface VideoDAO {
     boolean alreadyLiked(int videoId, int userId);
 
     int unlikeVideo(int videoId, int userId);
+
+    ArrayList<Video> getLikedByUser(int userId) throws Exception;
+
+
 }

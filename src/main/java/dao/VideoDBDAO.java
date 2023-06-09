@@ -202,6 +202,31 @@ public class VideoDBDAO implements VideoDAO{
     }
 
     @Override
+    public ArrayList<Video> getLikedByUser(int userId) throws Exception {
+        String sql = "SELECT id, title, url, owner_id, views" +
+                " FROM videos" +
+                " JOIN users_like_videos" +
+                " ON videos.id = users_like_videos.video_id" +
+                " WHERE user_id = ?;";
+        try (PreparedStatement ps = connection.prepareStatement(sql)){
+            ps.setInt(1, userId);
+            ResultSet rows = ps.executeQuery();
+            ArrayList<Video> videos = new ArrayList<>();
+            while (rows.next()){
+                videos.add(new Video(rows.getInt( "id"),
+                                     rows.getString("title"),
+                                     rows.getString("url"),
+                                     UserDBDAO.getInstance().getById(rows.getInt("owner_id")),
+                                     rows.getInt("views")));
+            }
+            return videos;
+        } catch (SQLException e) {
+            System.out.println("Error while retrieve liked videos." + e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
     public int removeDislikeVideo(int videoId, int userId) {
         String deleteDislike = "DELETE FROM users_dislike_videos WHERE video_id = ? AND user_id = ?;";
         String selectDislikes = "SELECT COUNT(*) FROM users_dislike_videos WHERE video_id = ?;";
